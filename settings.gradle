@@ -1,0 +1,62 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        maven {
+            url "https://maven.lukebemish.dev/releases/"
+        }
+    }
+    plugins {
+        id 'com.gradle.plugin-publish' version '+'
+    }
+}
+
+buildscript {
+    dependencyLocking {
+        lockMode = LockMode.STRICT
+        lockAllConfigurations()
+        lockFile.set file("locks/settings-buildscript-gradle.lockfile")
+    }
+}
+
+plugins {
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '+'
+    id 'dev.lukebemish.managedversioning' version '+'
+    id 'dev.lukebemish.conventions' version '+'
+}
+
+gradle.lifecycle.beforeProject { p ->
+    p.buildscript {
+        dependencyLocking {
+            lockMode = LockMode.STRICT
+            lockAllConfigurations()
+            var cleanProjectName = (p.path + ":").replace(':', ' ').trim().replace(' ', '-')
+            lockFile.set rootProject.file("locks/${cleanProjectName}${cleanProjectName.empty ? '' : '-'}buildscript-gradle.lockfile")
+        }
+    }
+}
+
+managedVersioning {
+    versionFile.set file('version.properties')
+    versionPRs()
+    versionSnapshots()
+
+    publishing {
+        mavenStaging()
+        mavenSnapshot()
+        mavenPullRequest()
+    }
+}
+
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+        maven {
+            name = "Gradle Releases"
+            url = "https://repo.gradle.org/gradle/libs-releases"
+        }
+    }
+    repositoriesMode = RepositoriesMode.FAIL_ON_PROJECT_REPOS
+    rulesMode = RulesMode.FAIL_ON_PROJECT_RULES
+}
+
+rootProject.name = 'jvmfinder'

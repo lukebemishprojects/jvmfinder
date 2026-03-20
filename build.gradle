@@ -1,0 +1,63 @@
+import org.gradle.api.attributes.plugin.GradlePluginApiVersion
+
+plugins {
+    id 'com.gradle.plugin-publish'
+    id 'java-library'
+    id 'maven-publish'
+    id 'java-gradle-plugin'
+}
+
+group = 'dev.lukebemish'
+
+java{
+    toolchain.languageVersion = JavaLanguageVersion.of(25)
+    withSourcesJar()
+    withJavadocJar()
+}
+
+tasks.named('compileJava', JavaCompile) {
+    options.encoding = 'UTF-8'
+    options.release = 17
+}
+
+['apiElements', 'runtimeElements'].each {
+    configurations.named(it).configure {
+        attributes {
+            attribute(
+                    GradlePluginApiVersion.GRADLE_PLUGIN_API_VERSION_ATTRIBUTE,
+                    objects.named(GradlePluginApiVersion, libs.versions.gradle.get())
+            )
+        }
+    }
+}
+
+gradlePlugin {
+    website = 'https://github.com/lukebemishprojects/jvmfinder'
+    vcsUrl = 'https://github.com/lukebemishprojects/jvmfinder.git'
+
+    plugins {
+        jvmfinderPlugin {
+            id = 'dev.lukebemish.jvmfinder'
+            implementationClass = 'dev.lukebemish.jvmfinder.JvmFinderPlugin'
+        }
+        jvmfinderConventionPlugin {
+            id = 'dev.lukebemish.jvmfinder-convention'
+            implementationClass = 'dev.lukebemish.jvmfinder.JvmFinderConventionPlugin'
+        }
+    }
+}
+
+dependencies {
+    compileOnly(libs.gradle) {
+        capabilities {
+            requireFeature "internal"
+        }
+    }
+    compileOnly("org.apache.groovy:groovy-json")
+}
+
+configurations.named("compileOnlyApi") {
+    withDependencies {
+        it.removeElement(project.dependencies.gradleApi())
+    }
+}

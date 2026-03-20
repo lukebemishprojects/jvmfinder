@@ -1,0 +1,7 @@
+pluginManagement {
+    includeBuild("../")
+}
+
+plugins {
+    id "dev.lukebemish.jvmfinder-convention"
+}
