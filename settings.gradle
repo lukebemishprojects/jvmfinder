@@ -45,6 +45,67 @@ managedVersioning {
         mavenSnapshot()
         mavenPullRequest()
     }
+
+    gitHubActions {
+        release {
+            prettyName = 'Release'
+            workflowDispatch = true
+            gradleJob {
+                javaVersion.set '21'
+                name.set 'build'
+                buildCache()
+                setupGitUser()
+                readOnly = false
+                gradlew 'Tag Release', 'tagRelease'
+                gradlew 'Build', 'build'
+                push()
+                recordVersion 'Record Version', 'version'
+                dependencySubmission()
+            }
+            gradleJob {
+                javaVersion.set '21'
+                name.set 'publishPlugins'
+                buildCache()
+                needs.add('build')
+                gradlew 'Publish Plugins', 'publishPlugins'
+                tag.set('${{needs.build.outputs.version}}')
+                pluginPortal()
+            }
+        }
+        snapshot {
+            prettyName.set 'Snapshot'
+            workflowDispatch.set(true)
+            onBranches.add 'main'
+            gradleJob {
+                javaVersion.set '21'
+                name.set 'build'
+                buildCache()
+                cacheReadOnly = false
+                gradlew 'Build', 'build'
+                gradlew 'Publish', 'publish'
+                mavenSnapshot('github')
+            }
+        }
+        build_pr {
+            prettyName.set 'Build PR'
+            pullRequest.set(true)
+            gradleJob {
+                javaVersion.set '21'
+                name.set 'build'
+                gradlew 'Build', 'build'
+                gradlew 'Publish', 'publish'
+                pullRequestArtifact()
+            }
+        }
+        publish_pr {
+            prettyName.set 'Publish PR'
+            publishPullRequestAction(
+                'github',
+                "dev/lukebemish/jvmfinder*,dev/lukebemish/jvmfinder",
+                'Build PR'
+            )
+        }
+    }
 }
 
 dependencyResolutionManagement {

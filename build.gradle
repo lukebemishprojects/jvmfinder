@@ -39,10 +39,16 @@ gradlePlugin {
         jvmfinderPlugin {
             id = 'dev.lukebemish.jvmfinder'
             implementationClass = 'dev.lukebemish.jvmfinder.JvmFinderPlugin'
+            displayName = 'JvmFinder'
+            description = 'Toolchains resolver using vendor APIs directly.'
+            tags.addAll(['toolchains'])
         }
         jvmfinderConventionPlugin {
             id = 'dev.lukebemish.jvmfinder-convention'
             implementationClass = 'dev.lukebemish.jvmfinder.JvmFinderConventionPlugin'
+            displayName = 'JvmFinder Convention Plugin'
+            description = 'Toolchains resolver using vendor APIs directly. Automatically configures toolchain management.'
+            tags.addAll(['toolchains'])
         }
     }
 }
