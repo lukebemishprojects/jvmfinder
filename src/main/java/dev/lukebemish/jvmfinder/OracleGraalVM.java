@@ -2,11 +2,15 @@ package dev.lukebemish.jvmfinder;
 
 import org.gradle.jvm.toolchain.JavaToolchainDownload;
 import org.gradle.jvm.toolchain.JvmImplementation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 import java.util.Optional;
 
 class OracleGraalVM {
+    private static final Logger LOGGER = LoggerFactory.getLogger(OracleGraalVM.class);
+
     static Optional<JavaToolchainDownload> resolve(JvmFinderRequest requestObj) {
         if (!JvmImplementation.VENDOR_SPECIFIC.equals(requestObj.impl()) || !requestObj.nativeImage().orElse(true)) {
             return Optional.empty();
@@ -44,6 +48,7 @@ class OracleGraalVM {
             var core = packages == null ? null : ((Map<?, ?>) packages).get("Core");
             var files = core == null ? null : (Map<?, ?>) ((Map<?, ?>) core).get("Files");
             if (files == null) {
+                LOGGER.info("Oracle GraalVM JSON file not structured as expected, may not be able to provision GraalVM JDK.");
                 continue;
             }
             for (var fileEntry : files.entrySet()) {

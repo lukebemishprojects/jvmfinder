@@ -2,6 +2,8 @@ package dev.lukebemish.jvmfinder;
 
 import groovy.json.JsonException;
 import groovy.json.JsonSlurper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -12,6 +14,8 @@ import java.net.URL;
 import java.util.Optional;
 
 class Utils {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Utils.class);
+
     static URL url(String url) {
         try {
             return new URL(url);
@@ -35,7 +39,7 @@ class Utils {
             int responseCode = connection.getResponseCode();
             return (200 <= responseCode && responseCode < 300) ? Optional.of(uri) : Optional.empty();
         } catch (IOException e) {
-            // TODO: log
+            LOGGER.info("Failed to connect to URL: {}", uri, e);
             return Optional.empty();
         }
     }
@@ -44,7 +48,7 @@ class Utils {
         try {
             return Optional.of(new JsonSlurper().parse(url));
         } catch (JsonException ignored) {
-            // TODO: log
+            LOGGER.info("Failed to parse expected JSON from URL: {}", url);
             return Optional.empty();
         }
     }
