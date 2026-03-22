@@ -2,6 +2,7 @@ import org.gradle.api.attributes.plugin.GradlePluginApiVersion
 
 plugins {
     id 'com.gradle.plugin-publish'
+    id 'org.gradle.plugin-compatibility'
     id 'java-library'
     id 'maven-publish'
     id 'java-gradle-plugin'
@@ -42,6 +43,11 @@ gradlePlugin {
             displayName = 'JvmFinder'
             description = 'Toolchains resolver using vendor APIs directly.'
             tags.addAll(['toolchains'])
+            compatibility {
+                features {
+                    configurationCache = true
+                }
+            }
         }
         jvmfinderConventionPlugin {
             id = 'dev.lukebemish.jvmfinder-convention'
@@ -49,6 +55,11 @@ gradlePlugin {
             displayName = 'JvmFinder Convention Plugin'
             description = 'Toolchains resolver using vendor APIs directly. Automatically configures toolchain management.'
             tags.addAll(['toolchains'])
+            compatibility {
+                features {
+                    configurationCache = true
+                }
+            }
         }
     }
 }
