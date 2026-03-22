@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-class Adoptium {
+class Azul {
     static Optional<JavaToolchainDownload> resolve(JvmFinderRequest requestObj) {
-        if (!JvmImplementation.VENDOR_SPECIFIC.equals(requestObj.impl()) || requestObj.nativeImage()) {
+        if (!JvmImplementation.VENDOR_SPECIFIC.equals(requestObj.impl()) || requestObj.nativeImage().orElse(false)) {
             return Optional.empty();
         }
         var osString = switch (requestObj.os()) {
@@ -28,17 +28,19 @@ class Adoptium {
             return Optional.empty();
         }
         var url = String.format(
-                "https://api.adoptium.net/v3/assets/latest/%s/hotspot?architecture=%s&image_type=jdk&os=%s&vendor=eclipse",
+                "https://api.azul.com/metadata/v1/zulu/packages/?java_version=%s&arch=%s&os=%s&archive_type=zip&java_package_type=jdk&latest=true",
                 requestObj.version().asInt(),
                 archString, osString
         );
-        var response = (List<?>) Utils.json(Utils.url(url));
+        var maybeResponse = Utils.json(Utils.url(url));
+        if (maybeResponse.isEmpty()) {
+            return Optional.empty();
+        }
+        var response = (List<?>) maybeResponse.get();
         if (response.isEmpty()) {
             return Optional.empty();
         }
-        var binary = ((Map<?, ?>) response.get(0)).get("binary");
-        var packages = ((Map<?, ?>) binary).get("package");
-        var link = (String) ((Map<?, ?>) packages).get("link");
-        return Optional.of(JavaToolchainDownload.fromUri(Utils.uri(link)));
+        var link = (String) ((Map<?, ?>) response.get(0)).get("download_url");
+        return Utils.available(Utils.url(link)).map(Utils::uri).map(JavaToolchainDownload::fromUri);
     }
 }

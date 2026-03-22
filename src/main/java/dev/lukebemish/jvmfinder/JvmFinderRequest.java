@@ -6,6 +6,8 @@ import org.gradle.jvm.toolchain.JvmVendorSpec;
 import org.gradle.platform.Architecture;
 import org.gradle.platform.OperatingSystem;
 
+import java.util.Optional;
+
 record JvmFinderRequest(JvmImplementation impl, JvmVendorSpec vendor, JavaLanguageVersion version,
-                               boolean nativeImage, Architecture arch, OperatingSystem os) {
+                        Optional<Boolean> nativeImage, Architecture arch, OperatingSystem os) {
 }
