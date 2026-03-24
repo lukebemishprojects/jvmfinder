@@ -61,6 +61,30 @@ gradlePlugin {
                 }
             }
         }
+        jvmfinderJetbrainsPlugin {
+            id = 'dev.lukebemish.jvmfinder-jetbrains'
+            implementationClass = 'dev.lukebemish.jvmfinder.JvmFinderJetbrainsPlugin'
+            displayName = 'JvmFinder using Jetbrains Index'
+            description = 'Toolchains resolver using the same index used by Jetbrains IDEs and Amper.'
+            tags.addAll(['toolchains'])
+            compatibility {
+                features {
+                    configurationCache = true
+                }
+            }
+        }
+        jvmfinderJetbrainsConventionPlugin {
+            id = 'dev.lukebemish.jvmfinder-jetbrains-convention'
+            implementationClass = 'dev.lukebemish.jvmfinder.JvmFinderJetbrainsConventionPlugin'
+            displayName = 'JvmFinder Convention Plugin using Jetbrains Index'
+            description = 'Toolchains resolver using the same index used by Jetbrains IDEs and Amper. Automatically configures toolchain management.'
+            tags.addAll(['toolchains'])
+            compatibility {
+                features {
+                    configurationCache = true
+                }
+            }
+        }
     }
 }
 
@@ -70,6 +94,9 @@ dependencies {
             requireFeature "internal"
         }
     }
+    implementation("com.google.code.gson:gson:2.13.2")
+    implementation("org.apache.commons:commons-compress:1.28.0")
+    implementation("org.tukaani:xz:1.12")
     compileOnly("org.apache.groovy:groovy-json")
 }
 

@@ -18,7 +18,7 @@ plugin:
 
 ```gradle
 plugins {
-    id "dev.lukebemish.jvmfinder-convention" version "<...>"
+    id "dev.lukebemish.jvmfinder" version "<...>"
 }
 ```
 
@@ -31,3 +31,9 @@ Currently, the following JVM distributions are supported:
 - Microsoft Build of OpenJDK (through Adoptium Marketplace)
 - Azul Zulu
 - Oracle GraalVM (somewhat experimental support)
+
+## Jetbrains Index Based Resolution
+
+`jvmfinder` also offers a resolver that uses the same index of JVMs that jetbrains IDEs (and their Amper incubator) do.
+To use, apply the `dev.lukebemish.jvmfinder-jetbrains-convention` plugin (or `dev.lukebemish.jvmfinder-jetbrains` to not
+automatically configure toolchain repositories). This can be used in addition to or in place of the base plugin (and foojay).
