@@ -15,5 +15,6 @@ public abstract class JvmFinderPlugin implements Plugin<Settings> {
 
         JavaToolchainResolverRegistry registry = getToolchainResolverRegistry();
         registry.register(JvmFinderToolchainResolver.class);
+        registry.register(JetbrainsToolchainResolver.class);
     }
 }

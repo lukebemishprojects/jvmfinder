@@ -61,18 +61,6 @@ gradlePlugin {
                 }
             }
         }
-        jvmfinderJetbrainsPlugin {
-            id = 'dev.lukebemish.jvmfinder-jetbrains'
-            implementationClass = 'dev.lukebemish.jvmfinder.JvmFinderJetbrainsPlugin'
-            displayName = 'JvmFinder using Jetbrains Index'
-            description = 'Toolchains resolver using the same index used by Jetbrains IDEs and Amper.'
-            tags.addAll(['toolchains'])
-            compatibility {
-                features {
-                    configurationCache = true
-                }
-            }
-        }
         jvmfinderJetbrainsConventionPlugin {
             id = 'dev.lukebemish.jvmfinder-jetbrains-convention'
             implementationClass = 'dev.lukebemish.jvmfinder.JvmFinderJetbrainsConventionPlugin'

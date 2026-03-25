@@ -7,7 +7,7 @@ import org.gradle.jvm.toolchain.JvmToolchainManagement;
 public abstract class JvmFinderJetbrainsConventionPlugin implements Plugin<Settings> {
     @Override
     public void apply(Settings settings) {
-        settings.getPluginManager().apply(JvmFinderJetbrainsPlugin.class);
+        settings.getPluginManager().apply(JvmFinderPlugin.class);
 
         settings.toolchainManagement(toolchainManagement -> {
             var jvm = toolchainManagement.getExtensions().getByType(JvmToolchainManagement.class);

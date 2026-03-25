@@ -35,5 +35,4 @@ Currently, the following JVM distributions are supported:
 ## Jetbrains Index Based Resolution
 
 `jvmfinder` also offers a resolver that uses the same index of JVMs that jetbrains IDEs (and their Amper incubator) do.
-To use, apply the `dev.lukebemish.jvmfinder-jetbrains-convention` plugin (or `dev.lukebemish.jvmfinder-jetbrains` to not
-automatically configure toolchain repositories). This can be used in addition to or in place of the base plugin (and foojay).
+To use, apply the `dev.lukebemish.jvmfinder-jetbrains-convention` plugin. This can be used in addition to or in place of the base plugin (and foojay).
